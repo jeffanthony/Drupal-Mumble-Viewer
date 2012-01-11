@@ -1,0 +1,29 @@
+Drupal Mumble Viewer readme
+
+! This is just a straight-forward port to Drupal of the Drupal Mumble Viewer modules already existing
+! for Joomla! and Wordpress. The class is written by Mike Johnson and Doug Gilbert, i added minor
+! functionality and made it Drupal-ready + wrote the rest of the module.
+
+
+1. Unpack the module to your sites/all/modules directory.
+2. Enable the module at the modules page.
+3. Configure the module at the configuration page.
+4. Enable the block on the blocks page.
+5. Take a look at the page where you enabled the block.
+6. Time to relax.
+
+
+!!!! This module DOES NOT PROVIDE the Json module, it ONLY supports the display for the Json data.
+!!!! You will have to install a Json provider, like for example MumPI, to be able to use this module.
+!!!! But ones you have the Json provider working, it should be very simple to configure and use.
+
+
+More info:
+
+I am working on a lightweight Json provider module for Drupal, that will be a separate project.
+You can install this package on your Mumble server if you run Drupal on that machine.
+
+I'm also planning a stand-alone application that offers JUST and ONLY the Json output for 1 server.
+This will not need any other software, only ICE, a running webserver (Apache) and PHP + PHP ICE mod.
+
+Stay tuned for updates!
