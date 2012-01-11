@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * A module for displaying Mumble Server block.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function dmv_menu() {
+  $items = array();
+  $items['admin/config/dmv'] = array(
+    'title' => 'Drupal Mumble Viewer',
+    'description' => 'Configure DMV.',
+    'position' => 'right',
+    'weight' => -500,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array( 'administer dmv' ),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path( 'module', 'system' ),
+  );
+  $items['admin/config/dmv/block'] = array(
+    'title' => 'DMV Settings',
+    'description' => 'Configure the DMV module.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array( 'dmv_settings' ),
+    'access arguments' => array( 'administer dmv' ),
+    'weight' => -15,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function dmv_permission() {
+  return array(
+    'administer dmv' => array(
+      'title' => t( 'Administer DMV' ),
+      'description' => t( 'Configure Drupal Mumble Viewer' ),
+    ),
+    'view dmv block' => array(
+      'title' => t( 'View the DMV block' ),
+      'description' => t( 'View the Drupal Mumble Viewer block' ),
+    ),
+  );
+}
+
+/**
+ * Callback for settings page
+ */
+function dmv_settings( $form, &$form_state ) {
+  $form['info'] = array(
+    '#type' => 'fieldset',
+    '#title' => t( 'DMV Configuration' ),
+    '#collapsible' => FALSE,
+    );
+  $form['info']['dmv_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t( 'Title' ),
+    '#default_value' => variable_get( 'dmv_title', t( 'Server Name' ) ),
+    '#description' => t('The title of the') . ' ' . l(t( 'dmv page' ), 'dmv') . '.',
+  );
+  $form['info']['dmv_data'] = array( '#type' => 'textfield',
+    '#required' => TRUE,
+    '#title' => t( 'Address for the server providing the data output.' ),
+    '#default_value' => variable_get( 'dmv_data', '' ),
+    '#description' => t( 'Add the complete address for the location of the data output.' ),
+  );
+  $form['info']['dmv_data_type'] = array(
+    '#type' => 'radios',
+    '#title' => t( 'Data type' ),
+    '#description' => t( '' ),
+    '#default_value' => variable_get( 'dmv_data_type', 'json' ),
+    '#options' => array( 'json' => t( 'Json' ), 'xml' => t( 'XML' ) ),
+  );
+  return system_settings_form( $form );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Implements hook_block_configure().
+ */
+function dmv_block_configure( $delta = '' ) {
+  $form['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t( 'Status' ),
+    '#default_value' => '',
+    '#description' => t( 'Active or disabled' ),
+  );
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function dmv_block_save( $delta = '', $edit = array() ) {
+}
+
+
+/**
+ * Implementations hook_block_info().
+ */
+function dmv_block_info() {
+  $blocks = array();
+    $blocks['dmv-block'] = array(
+      'info' => t( 'DMV Block' ),
+    );
+  return $blocks;
+}
+
+/**
+ * Implementations hook_block_view().
+ */
+function dmv_block_view( $delta = '' ) {
+  $content = dmv_channel_block_content();
+  $blocks = array();
+  switch ($delta) {
+    case 'dmv-block':
+      $blocks['subject'] = variable_get( 'dmv_title', t( 'Server Name' ) );
+      $blocks['content'] = $content;
+      break;
+  }
+  return $blocks;
+}
+
+/**
+ * custom html block
+ * @return string
+ */
+function dmv_channel_block_content() {
+  drupal_add_css( drupal_get_path( 'module', 'dmv' ) . '/mumble-channel-viewer.css', array( 'group' => CSS_DEFAULT, 'every_page' => TRUE ) );
+  $dataUri = variable_get( 'dmv_data', '' );
+  $dataFormat = variable_get( 'dmv_data_type', 'json' );
+  $output = '';
+  $output .= "<div id='mumbleViewer' class=''>";
+  require_once( 'class-mumble-channel-viewer.php' );
+  $output .= MumbleChannelViewer::render( $dataUri, $dataFormat );
+  $output .= '</div>';
+  return $output;
+}
+
+
