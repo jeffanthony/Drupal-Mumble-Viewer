@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install, update functions for the DMV module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function dmv_uninstall() {
+  // delete all variables related to dmv
+  db_delete('variable')
+    ->condition('name', db_like('dmv_') . '%', 'LIKE')
+    ->execute();
+
+  // delete all blocks related to dma
+  db_delete('block')
+    ->condition('module', 'dmv', '=')
+    ->execute();
+}
+
