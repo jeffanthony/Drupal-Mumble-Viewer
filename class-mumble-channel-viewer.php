@@ -44,7 +44,7 @@ class MumbleChannelViewer {
       )
     );
     $httpContext = stream_context_create( $httpOptions );
-    $jsonRaw = file_get_contents( $jsonUri, FALSE, $httpContext );
+    $jsonRaw = @file_get_contents( $jsonUri, FALSE, $httpContext );
     if ( $jsonRaw == FALSE )
       return "<div class='mumbleChannelViewer-error'>Unable to connect to the specified Mumble server.</div>";
 
@@ -119,9 +119,9 @@ class MumbleChannelViewer {
       $output .= "<span class='mumbleChannelViewer-selfMuted mumbleChannelViewer-statusIcon'>Self-Muted</span>";
     if ( $user["mute"] )
       $output .= "<span class='mumbleChannelViewer-muted mumbleChannelViewer-statusIcon'>Server-Muted</span>";
-    if ( isset( $user["recording"] ) )
+    if ( isset( $user["recording"] ) && $user["recording"] != '' )
       $output .= "<span class='mumbleChannelViewer-recording mumbleChannelViewer-statusIcon'>recording</span>";
-    if ( isset( $user["priorityspeaker"] ) )
+    if ( isset( $user["priorityspeaker"] ) && $user["priorityspeaker"] != '' )
       $output .= "<span class='mumbleChannelViewer-priorityspeaker mumbleChannelViewer-statusIcon'>priorityspeaker</span>";
     $output .= "<span class='mumbleChannelViewer-user'>{$user["name"]}</span></li>";
     return $output;

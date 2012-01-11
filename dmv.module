@@ -60,7 +60,7 @@ function dmv_settings( $form, &$form_state ) {
     '#type' => 'textfield',
     '#title' => t( 'Title' ),
     '#default_value' => variable_get( 'dmv_title', t( 'Server Name' ) ),
-    '#description' => t('The title of the') . ' ' . l(t( 'dmv page' ), 'dmv') . '.',
+    '#description' => t( 'The dmv block title' ),
   );
   $form['info']['dmv_data'] = array( '#type' => 'textfield',
     '#required' => TRUE,
@@ -73,72 +73,19 @@ function dmv_settings( $form, &$form_state ) {
     '#title' => t( 'Data type' ),
     '#description' => t( '' ),
     '#default_value' => variable_get( 'dmv_data_type', 'json' ),
-    '#options' => array( 'json' => t( 'Json' ), 'xml' => t( 'XML' ) ),
+    '#options' => array( 'json' => t( 'Json' ) ),
   );
   return system_settings_form( $form );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Implements hook_block_configure().
- */
-function dmv_block_configure( $delta = '' ) {
-  $form['status'] = array(
-    '#type' => 'checkbox',
-    '#title' => t( 'Status' ),
-    '#default_value' => '',
-    '#description' => t( 'Active or disabled' ),
-  );
-  return $form;
-}
-
-/**
- * Implements hook_block_save().
- */
-function dmv_block_save( $delta = '', $edit = array() ) {
-}
-
 
 /**
  * Implementations hook_block_info().
  */
 function dmv_block_info() {
   $blocks = array();
-    $blocks['dmv-block'] = array(
-      'info' => t( 'DMV Block' ),
-    );
+  $blocks['dmv-block'] = array(
+    'info' => t( 'DMV Block' ),
+  );
   return $blocks;
 }
 
@@ -162,15 +109,16 @@ function dmv_block_view( $delta = '' ) {
  * @return string
  */
 function dmv_channel_block_content() {
-  drupal_add_css( drupal_get_path( 'module', 'dmv' ) . '/mumble-channel-viewer.css', array( 'group' => CSS_DEFAULT, 'every_page' => TRUE ) );
-  $dataUri = variable_get( 'dmv_data', '' );
-  $dataFormat = variable_get( 'dmv_data_type', 'json' );
-  $output = '';
-  $output .= "<div id='mumbleViewer' class=''>";
-  require_once( 'class-mumble-channel-viewer.php' );
-  $output .= MumbleChannelViewer::render( $dataUri, $dataFormat );
-  $output .= '</div>';
-  return $output;
+  if ( user_access('view dmv block') ) {
+    drupal_add_css( drupal_get_path( 'module', 'dmv' ) . '/mumble-channel-viewer.css', array( 'group' => CSS_DEFAULT, 'every_page' => TRUE ) );
+    $dataUri = variable_get( 'dmv_data', '' );
+    $dataFormat = variable_get( 'dmv_data_type', 'json' );
+    $output = '';
+    $output .= "<div id='mumbleViewer' class=''>";
+    require_once( 'class-mumble-channel-viewer.php' );
+    $output .= MumbleChannelViewer::render( $dataUri, $dataFormat );
+    $output .= '</div>';
+    return $output;
+  }
 }
-
 

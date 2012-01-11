@@ -5,3 +5,4 @@ core = 7.x
 php = 5.2
 configure = admin/config/dmv
 files[] = dmv.module
+
