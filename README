@@ -1,8 +1,8 @@
 Drupal Mumble Viewer readme
 
-! This is just a straight-forward port to Drupal of the Drupal Mumble Viewer modules already existing
-! for Joomla! and Wordpress. The class is written by Mike Johnson and Doug Gilbert, i added minor
-! functionality and made it Drupal-ready + wrote the rest of the module.
+This is just a straight-forward port to Drupal 7 of the Drupal Mumble Viewer modules already existing
+for Joomla! and Wordpress. The class is written by Mike Johnson and Doug Gilbert, i added minor
+functionality and made it Drupal-ready + wrote the rest of the module.
 
 
 1. Unpack the module to your sites/all/modules directory.
